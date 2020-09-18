@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
-import PostContainer from './components/Post/index';
-import NewPost from './components/CreatePost/index';
-import SearchBox from './components/Search/index'
-import { Navbar, Nav,FormControl,Form,Button } from 'react-bootstrap';
+import Home from './components/home'
+import store from './store/configureStore'
 
-export default function App() {
-
-  return ;
+class App extends Component {
+  render() {
+    return (
+        <Home/>     
+    );
+  }
 }
+
+
+export default App;

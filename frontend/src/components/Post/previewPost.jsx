@@ -1,6 +1,6 @@
 import React from 'react';
-import {Jumbotron} from 'react-bootstrap';
-//import './index.css';
+import {Jumbotron, Button} from 'react-bootstrap';
+import './previewPost.css';
 
 class PreviewPost extends React.Component {
     constructor(props) {
@@ -21,6 +21,9 @@ class PreviewPost extends React.Component {
       return (
         <Jumbotron>
           <h3>{this.props.title}</h3> <h4>author: {this.props.author}</h4>
+          <div >{this.props.tags.map((item,index)=>(
+            <Button key={index} inline="true" className="mr-sm-2 tags-button" variant="info">{item}</Button> 
+          ))}</div>
           <Content value={this.props.content}></Content>
         </Jumbotron>
       );
