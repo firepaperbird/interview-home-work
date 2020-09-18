@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
 const router = require("express").Router();
 const BlogPost = mongoose.model("BlogPost");
+const passport = require("passport");
 
-router.get("/", (req, res, next) => {
+router.get("/", async (req, res, next) => {
   return BlogPost.find()
     .sort({ created: "descending" })
     .then((blogs) => res.json({ blogPosts: blogs.map((p) => p.toJSON()) })) // cat noi dung 100 chu~
     .catch(next);
 });
 
-router.get("/:id", (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   const id = req.params.id;
   return BlogPost.findById(id, (err, blg) => {
     if (err) {
@@ -20,7 +21,7 @@ router.get("/:id", (req, res, next) => {
   }).catch(next);
 });
 
-router.get("/search/:value", (req, res, next) => {
+router.get("/search/:value", async (req, res, next) => {
   const search = req.params.value;
   return BlogPost.find(
     {$or:[
@@ -36,10 +37,8 @@ router.get("/search/:value", (req, res, next) => {
   }).catch(next);
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", passport.authenticate("jwt", { session: false }),async (req, res, next) => {
   const { body } = req;
-
-  console.log(body);
   if (!body.title) {
     return res.status(422).json({
       errors: {
@@ -71,7 +70,7 @@ router.post("/", (req, res, next) => {
     .catch(next);
 });
 
-router.patch("/:id", (req, res, next) => {
+router.patch("/:id", passport.authenticate("jwt", { session: false }), async (req, res, next) => {
   let updateBlog = {};
 
   const { body } = req;
@@ -95,7 +94,7 @@ router.patch("/:id", (req, res, next) => {
     .then(() => res.json({ blogPost: updateBlog }))
     .catch(next);
 });
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", passport.authenticate("jwt", { session: false }), async (req, res, next) => {
   return Articles.findOneAndUpdate({ id: req.params.id }, { deleted: true })
     .then(() => res.sendStatus(200))
     .catch(next);
